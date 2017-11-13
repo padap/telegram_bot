@@ -8,7 +8,7 @@
 ----
 
 ## Библиотеки
-'''
+`
 	pip3 install pip3 install beautifulsoup4
 	pip3 install wikipedia
 	pip3 install telebot 
@@ -18,7 +18,10 @@
     // python setup.py install
     // cd ..
     // rm -rf pyTelegramBotAPI
-'''
+`
+
+## Запуск
+	sudo python3 main.py
 
 ## Описание
 

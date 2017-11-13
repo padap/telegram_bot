@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 LANG = "ru"
 wikipedia.set_lang(LANG)
 
-def change_lang(s):        #Not work, use bd
+def change_lang(s):
     wikipedia.set_lang(s)
     return
 
@@ -44,12 +44,11 @@ class wiki_parser:
             self.page = wikipedia.page(self.search[0])
         except wikipedia.exceptions.DisambiguationError as e:
             self.status = 2
-            self.suggestion = e.options # Не корректно, на английском языке все работает, на русском не всегда
+            # self.suggestion = e.options # Работает Не корректно на русском языке (Не выводит полное название статьи)
             self.suggestion = get_suggested(self.search[0])
             return
         self.status = 1
         return True
-#   logging
 
     def __init__(self, query):
         print('new_object')

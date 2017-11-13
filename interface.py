@@ -68,7 +68,7 @@ class menu():
         history_query = logs.read(n = show_n_history, pos = pos)
 
         for text in history_query:
-            keyboard.add( types.InlineKeyboardButton(text = text , callback_data = "/search%"+text) )
+            keyboard.add( types.InlineKeyboardButton(text = text[:25] , callback_data = "/search%"+text[:25]))
         keyboard.add(*buttons_prev_next(pos, len(history_query), ref = "/history%"))
         keyboard.add(types.InlineKeyboardButton(text = "Назад",  callback_data = "/main"))
 
@@ -85,7 +85,7 @@ class menu():
 
     def equal_pages(self, call):
         q = call.data
-
+        print(q)
         keyboard = types.InlineKeyboardMarkup()
         pos = re.search(r'\d+',call.data)
         pos = int(pos.group(0)) if pos != None else 0
@@ -93,7 +93,7 @@ class menu():
         simmilar_query = last_article.read(n = show_n_simmilar, pos = pos)
 
         for text in simmilar_query:
-            keyboard.add(types.InlineKeyboardButton(text = text , callback_data = "/search%"+text))
+            keyboard.add(types.InlineKeyboardButton(text = text[:25] , callback_data = "/search%"+text[:25]))
 
         keyboard.add(*buttons_prev_next(pos, len(simmilar_query), ref = "/equal%"))
         keyboard.add(types.InlineKeyboardButton(text = "Назад",  callback_data = "/main"))
@@ -128,7 +128,6 @@ class menu():
             self.equal_pages(call)
 
         if re.match(search_scenario, call.data) != None:
-            print("ok")
             q = call.data[call.data.find("%")+1:]
             self.info = {
                         "chat_id":call.message.chat.id,

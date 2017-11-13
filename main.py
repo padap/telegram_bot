@@ -4,7 +4,6 @@ import telebot
 from wiki_parser import wiki_parser, change_lang
 from logs import log, page_cache
 from interface import menu
-# wikipedia.set_lang('ru')
 from telebot import types
 import re
 
@@ -46,7 +45,7 @@ def main(message_chat_id, message_text):
             button = types.InlineKeyboardButton(text = ttemp, callback_data = "/search%"+ttemp)
             keyboard.add(button)
 
-        button = types.InlineKeyboardButton(text = "Закрыть", callback_data = "/main")
+        button = types.InlineKeyboardButton(text = "Закрыть", callback_data = "/main" )
         keyboard.add(button)
 
         bot.send_message(message_chat_id, message_text+" (значения)", reply_markup=keyboard)

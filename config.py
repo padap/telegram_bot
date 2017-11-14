@@ -1,3 +1,5 @@
 # -*- coding: utf-8 -*-
 # Валидный токен
-token = '457070988:AAFcq_BwRxWEm9cbQtFPPjvOM4vJQj8lxd4'
+token = '263242138:AAHuTewcZrAI2H17U7tWNNGRRZvhDLHV49M'
+
+

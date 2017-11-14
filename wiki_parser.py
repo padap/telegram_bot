@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import wikipedia
 import requests
 from bs4 import BeautifulSoup
@@ -5,24 +6,24 @@ from bs4 import BeautifulSoup
 LANG = "ru"
 wikipedia.set_lang(LANG)
 
-def change_lang(s):
-    wikipedia.set_lang(s)
-    return
+# В библиотеке wikipedia не корректно
+# отображаются страницы с несколькими значаниями
 
-def get_suggested(q): # В библиотеке wikipedia не корректно отображаются страницы с несколькими значаниями
+
+def get_suggested(q, lang):
     answer = []
-    text = requests.get("https://"+LANG+".wikipedia.org/wiki/"+q).content
+    text = requests.get("https://"+lang+".wikipedia.org/wiki/"+q).content
     soup = BeautifulSoup(text, "html.parser")
-    for i in soup.findAll('a'):
-        if i.has_key('title'):
-            if q.lower() in i.text.lower():
-                if  not '(страница отсутствует)' in i['title']: 
-                    answer.append(i['title'].replace(':', " "))
-    print(answer)
-    return answer
+    for line in soup.findAll('a'):
+        if line.has_key('title'):
+            if q.lower() in line.text.lower():
+                if '(страница отсутствует)' not in line['title']:
+                    answer.append(line['title'].replace(':', " "))
+    return list(filter(lambda x:x.lower() != q.lower(), answer))
+
 
 class wiki_parser:
-    status = 0
+    status = "na"
     # 0 - not correct query
     # 1 - correct query
     # 2 - not correct, have a suggestion
@@ -36,22 +37,25 @@ class wiki_parser:
         self.search = search
         return True
 
-
     def parse(self):
-        if  not self.parse_wikipedia(): 
+        if not self.parse_wikipedia(): 
+            self.status = 0
             return False
         try:
             self.page = wikipedia.page(self.search[0])
         except wikipedia.exceptions.DisambiguationError as e:
             self.status = 2
-            # self.suggestion = e.options # Работает Не корректно на русском языке (Не выводит полное название статьи)
-            self.suggestion = get_suggested(self.search[0])
+            ## self.suggestion = e.options 
+            ## Работает Не корректно на русском языке (Не выводит полное название статьи)
+            self.suggestion = get_suggested(self.search[0], self.lang)
             return
         self.status = 1
         return True
 
-    def __init__(self, query):
-        print('new_object')
+    def __init__(self, query, lang=LANG):
+        wikipedia.set_lang(lang)
+        self.lang = lang
         self.query = query
         self.parse()
         return
+

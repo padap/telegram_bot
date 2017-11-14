@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 import telebot
 from telebot import types
 import re
-from logs import log, page_cache
+from logs import get_db
 
 show_n_history = 3
 show_n_simmilar = 3
@@ -16,8 +17,8 @@ settings_page = [
                     [ types.InlineKeyboardButton(text = "Назад",        callback_data = "/main")]
                 ]
 lanquage_change = [
-                    [types.InlineKeyboardButton(text  = "Русский",      callback_data = "/change_to_russian")],
-                    [types.InlineKeyboardButton(text  = "English",      callback_data = "/change_to_english")],
+                    [types.InlineKeyboardButton(text  = "Русский",      callback_data = "/changelang%ru")],
+                    [types.InlineKeyboardButton(text  = "English",      callback_data = "/changelang%en")],
                     [types.InlineKeyboardButton(text  = "Назад",        callback_data = "/settings")]
                   ]
 
@@ -42,6 +43,7 @@ fixed_scenario = {
 history_scenario = r'/history'
 equal_scenario   = r'/equal'
 search_scenario  = r'/search'
+lanquage_change  = r'/changelang'
 class menu():
 
     def fixed_page(self,q, chat_id = None, message_id = None):
@@ -64,8 +66,7 @@ class menu():
         keyboard = types.InlineKeyboardMarkup()
         pos = re.search(r'\d+',call.data)
         pos = int(pos.group(0)) if pos != None else 0
-        logs = log(call.message.chat.id)
-        history_query = logs.read(n = show_n_history, pos = pos)
+        history_query = get_db(call.message.chat.id, dtype = "history").read(n = show_n_history, pos = pos)
 
         for text in history_query:
             keyboard.add( types.InlineKeyboardButton(text = text[:25] , callback_data = "/search%"+text[:25]))
@@ -85,12 +86,10 @@ class menu():
 
     def equal_pages(self, call):
         q = call.data
-        print(q)
         keyboard = types.InlineKeyboardMarkup()
         pos = re.search(r'\d+',call.data)
         pos = int(pos.group(0)) if pos != None else 0
-        last_article = page_cache(call.message.chat.id)
-        simmilar_query = last_article.read(n = show_n_simmilar, pos = pos)
+        simmilar_query = get_db(call.message.chat.id, dtype = "page_cache").read(n = show_n_simmilar, pos = pos)
 
         for text in simmilar_query:
             keyboard.add(types.InlineKeyboardButton(text = text[:25] , callback_data = "/search%"+text[:25]))
@@ -103,6 +102,19 @@ class menu():
                      "text": "Связанные статьи:",
                      "parse_mode":'Markdown',
                      "reply_markup":keyboard
+                    }
+
+        self.success = True
+
+        pass
+
+    def changelang(self, call):
+        q = call.data
+        lang = re.search("%.*", q).group(0)[1:]
+        get_db(call.message.chat.id, 'settings').write(lang)
+        self.info = {"chat_id":call.message.chat.id,
+                     "message_id":call.message.message_id,
+                     "text": "язык был поменян на "+lang,
                     }
 
         self.success = True
@@ -136,6 +148,7 @@ class menu():
                         }
             self.success = True
             self.search = q
-            print(q)
-
+        if re.match(lanquage_change, call.data) != None:
+            self.changelang(call)
         return
+

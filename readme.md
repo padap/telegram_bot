@@ -17,12 +17,13 @@
 	pip3 install beautifulsoup4
 	pip3 install wikipedia
 	pip3 install pyTelegramBotAPI 
+	
 	// Если не сработает, можно поставить вручную
 	// git clone https://github.com/eternnoir/pyTelegramBotAPI.git
-    // cd pyTelegramBotAPI
-    // python setup.py install
-    // cd ..
-    // rm -rf pyTelegramBotAPI
+    	// cd pyTelegramBotAPI
+    	// python setup.py install
+    	// cd ..
+    	// rm -rf pyTelegramBotAPI
 ```
 ## 3. Запуск
 
@@ -32,21 +33,21 @@
 
 ## 4. Описание
 
-#### -- main.py
-	Основной  обработчик запросов
+#### - main.py
+  Основной  обработчик запросов
 
-#### -- config.py
-	telegram token
+#### - config.py
+  telegram token
 
-#### -- logs.py 
-	Логирование истории и рекомендуемых страниц.
-	Базы данных не использовались, не хотелось плодить лишних сущностей.
-	Реализован простой интерфейс записи в текстовые файлы от user_id.
+#### - logs.py 
+  Логирование истории и рекомендуемых страниц.
+  Базы данных не использовались, не хотелось плодить лишних сущностей.
+  Реализован простой интерфейс записи в текстовые файлы от user_id.
 
-#### --interface.py
-	Прописан скрипт меню
+#### -interface.py
+  Прописан скрипт меню
 
-#### --interface.py
-	Поиск по wikipedia
-	Добавлена функция get_suggested(), позволяющая парсить страницы со значеними запросов
+#### -interface.py
+  Поиск по wikipedia
+  Добавлена функция get_suggested(), позволяющая парсить страницы со значеними запросов
 

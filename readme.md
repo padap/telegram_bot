@@ -47,6 +47,6 @@
 #### interface.py
    Прописан скрипт меню
 
-#### interface.py
+#### wiki_parser.py
    Поиск по wikipedia
    Добавлена функция get_suggested(), позволяющая парсить страницы со значеними запросов
